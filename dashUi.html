@@ -1,0 +1,627 @@
+<div id="dashBody">
+    <!--<div class="container-fluid" id="dashHeader">
+        <h1>ANGELS OF GOD HOSPITAL</h1>
+        <h2>Patient's Manager</h2>
+    </div>-->
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#/dashboard">{{hosp}}</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="#/dashboard">Registar</a></li>
+                <li ng-if="superUser === 'Y'"><a href="#/systManager">Settings</a></li>                
+                <li ng-if="superUser === 'Y'"><a href="#/systData">Data</a></li>
+                <li>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">{{name}}
+                    <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                            <li><a href="#/logout">Logout</a></li>
+                    </ul>
+                </li>
+                
+            </ul>
+        </div>
+    </nav>
+    <div class="container dash" ng-if="superUser === 'Y' || whoAreYou === '5'">
+        <div class="col-sm-12">
+            <h2>Dispense Drugs</h2>
+            <div class="col-sm-6">
+                    <input type="text" placeholder="Search Patient..." ng-model="queryD" class="form-control search">
+            </div>
+            <div class="col-sm-6"></div>
+            <table class="table table-stripped">
+                <tr>
+                    <th>S/N</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Phone</th>
+                    <th>See Drugs</th>
+                </tr>
+                    
+                <tr ng-if="pharmLen < 1">
+                    <td colspan="5" class="centre">
+                        <span class="ash"> There are no patients to dispense drugs to.</span>
+                    </td>
+                </tr>
+                <tr ng-if="pharmLen == 1">
+                    <td>1</td>
+                    <td>{{ pharmfName }}</td>
+                    <td>{{ sName }}</td>
+                    <td>{{ phone }}</td>
+                    
+                    <td>
+                        <button data-toggle="modal" ng-click="dispenseDrug(visitId)" data-target="#dispenseDrug" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </button>
+                    </td>
+                </tr>
+                <tr ng-if="pharmLen > 1" ng-repeat="phar in pharms | filter: queryD">
+                    <td>{{$index + 1}}</td>
+                    <td>{{ phar.firstname }}</td>
+                    <td>{{ phar.surname }}</td>
+                    <td>{{ phar.phone }}</td>
+                    
+                    <td>
+                        <button data-toggle="modal" ng-click="dispenseDrug(pharm.visitId)" data-target="#dispenseDrug" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>        
+    </div>
+    
+    <div class="container dash" ng-if="superUser === 'Y' || whoAreYou === '1'">
+        
+        <div class="col-sm-12">
+            <h2>Patients to See</h2>
+            <div class="col-sm-6">
+                    <input type="text" placeholder="Search Patient..." ng-model="queryP" class="form-control search">
+            </div>
+            <div class="col-sm-6"></div>
+            <table class="table table-stripped">
+                <tr>
+                    <th>S/N</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Othername</th>
+                    <th>Phone</th>
+                    <th>Send In</th>
+                    <th>See</th>
+                </tr>
+                    
+                <tr ng-if="seePatientsNum < 1">
+                    <td colspan="7" class="centre">
+                        <span class="ash"> There are no patients scheduled to see a doctor at the moment.</span>
+                    </td>
+                </tr>
+                <tr ng-if="seePatientsNum >= 1" ng-repeat="patient in seePatients | filter:queryP">
+                    <td>{{$index + 1}}</td>
+                    <td>{{ patient.firstname }}</td>
+                    <td>{{ patient.surname }}</td>
+                    <td>{{ patient.othername }}</td>
+                    <td>{{ patient.phone }}</td>
+                    <td>
+                        <span ng-if="patient.sentIn == 'Y'">
+                            <button class="btn btn-danger btn-sm" disabled>
+                                Sent In
+                            </button>
+                        </span>
+                        <span ng-if="patient.sentIn == 'N'">
+                            <button class="btn btn-primary btn-sm" ng-click="sendIn(patient.id)">
+                                <span class="glyphicon glyphicon-thumbs-up"></span>
+                            </button>
+                        </span>
+                    </td>
+                    <td>
+                        <button data-toggle="modal" ng-click="setPatientId(patient.id)" data-target="#addConsultation" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>        
+    </div>
+    <div class="container dash" ng-if="superUser === 'Y' || whoAreYou === '4'">
+            <h2>Doctor Requests for: </h2>
+            <table class="table table-stripped">
+                    <tr>
+                        <th>S/N</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Othername</th>
+                        <th>Phone</th>
+                        <th>Send In</th>
+                    </tr>
+                        
+                    <tr ng-if="patToDrNum === 0">
+                        <td colspan="7" class="centre">
+                            <span class="ash"> The Doctor has not requested for any patient yet.</span>
+                        </td>
+                    </tr>
+                    <tr ng-if="patToDrNum !== 0" ng-repeat="patient in patToDr">
+                        <td>{{$index + 1}}</td>
+                        <td>{{ patient.firstname }}</td>
+                        <td>{{ patient.surname }}</td>
+                        <td>{{ patient.othername }}</td>
+                        <td>{{ patient.phone }}</td>
+                        <td>
+                            
+                            <span>
+                                <button class="btn btn-primary btn-sm" ng-click="sendToDoc(patient.id)">
+                                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+    </div>
+    <div class="container dash">
+        <h2>Hospital Register</h2>
+        <!--<div class="row">-->
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                        <input type="text" placeholder="Search Patient..." ng-model="query" class="form-control pull-left">
+                </div>
+                <div class="col-sm-6" ng-if="whoAreYou === '4'">
+                    <button data-toggle="modal" data-target="#addPatient" class="btn btn-primary pull-right"> 
+                        <span class="glyphicon glyphicon-plus"></span> 
+                        Add Patient
+                    </button>
+                </div>
+                
+            </div>
+        <!--</div>
+        <div class="row">-->
+            <div class="col-sm-12">
+
+                <table class="table table-stripped">
+                    <tr>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Othername</th>
+                        <th>Phone</th>
+                        <th>Last Visit</th>
+                        <th>Appointment</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    
+                    <tr ng-if="patientsNum < 1">
+                        <td colspan="7" class="centre">
+                            <span class="ash"> There are no patients in the databse. Please click on "+ Add patients" to add a patient</span>
+                        </td>
+                    </tr>
+                    <tr ng-if="patientsNum >= 1" ng-repeat="patient in patients | filter:query">
+                        <td>{{ patient.firstname | uppercase}}</td>
+                        <td>{{ patient.surname | uppercase}}</td>
+                        <td>{{ patient.othername | uppercase}}</td>
+                        <td>{{ patient.phone }}</td>
+                        <td>{{ patient.dateVisited | date}}</td>
+                        <td>
+                            <a ng-href="#/patientDetail/{{patient.id}}">
+                                <span class="glyphicon glyphicon-eye-open"></span></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#/patientDetail/{{patient.id}}">
+                                <span class="glyphicon glyphicon-pencil green"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="" ng-click="getDeleteModal(patient.firstname, patient.surname, patient.id)">
+                                <span class="glyphicon glyphicon-remove red"></span>
+                            </a>
+                        </td>
+
+                    </tr>
+                </table>
+            </div>  
+        <!--</div>
+        <div id="mgr">
+            <button class="btn btn-primary">System Manager</button>
+        </div>-->
+        
+    </div>
+    <!-- Modal -->
+    <div id="addPatient" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-plus"></span> Add Patient</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="" name="patientForm" ng-submit="submitPatientForm(patientForm.$valid, patient)" novalidate>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h3>Bio Data</h3>
+                                <hr>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.fName.$invalid && !patientForm.fName.$pristine }">
+                                    <label>Firstname</label>
+                                    <input type="text" name="fName" class="form-control" ng-model="patient.fName" required>
+                                    <p ng-show="patientForm.fName.$invalid && !patientForm.fName.$pristine" class="help-block">Your firstname is required.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.sName.$invalid && !patientForm.sName.$pristine }">
+                                    <label>Surname</label>
+                                    <input type="text" name="sName" class="form-control" ng-model="patient.sName" required>
+                                    <p ng-show="patientForm.sName.$invalid && !patientForm.sName.$pristine" class="help-block">Your surname is required.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Othername</label>
+                                    <input type="text" name="oName" class="form-control" ng-model="patient.oName">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.phone.$invalid && !patientForm.phone.$pristine }">
+                                    <label>Phone number</label>
+                                    <input type="text" name="phone" class="form-control" ng-model="patient.phone" ng-minlength="11" ng-maxlength="11">
+                                    <!--<p ng-show="patientForm.phone.$invalid && !patientForm.phone.$pristine" class="help-block">Your phone number is required.</p>-->
+                                    <p ng-show="patientForm.phone.$error.minlength" class="help-block">Phone number is too short.</p>
+                                    <p ng-show="patientForm.phone.$error.maxlength" class="help-block">Phone number is too long.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.dob.$invalid && !patientForm.dob.$pristine }">
+                                    <label>Date of Birth</label>
+                                    <input type="date" name="dob" class="form-control" ng-model="patient.dob" required>
+                                    <p ng-show="patientForm.dob.$invalid && !patientForm.dob.$pristine" class="help-block">Your date of birth is required.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.add.$invalid && !patientForm.add.$pristine }">
+                                    <label>Address</label>
+                                    <input type="text" name="add" class="form-control" ng-model="patient.add" required>
+                                    <p ng-show="patientForm.add.$invalid && !patientForm.add.$pristine" class="help-block">Your address is required.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.stateR.$invalid && !patientForm.stateR.$pristine }">
+                                    <label>State of Residence</label>
+                                    <select name="religion" name="stateR" class="form-control" ng-model="patient.stateR" required>
+                                        <option value="-">-</option>
+                                        <option ng-repeat="state in states" ng-value="state.id">
+                                            {{state.state}}
+                                        </option>
+                                    </select>
+                                    <p ng-show="patientForm.stateR.$invalid && !patientForm.stateR.$pristine" class="help-block">Please select a state of residence.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Occupation</label>
+                                    <input type="text" name="occupation" class="form-control" ng-model="patient.occupation">                                    
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.state.$invalid && !patientForm.state.$pristine }">
+                                    <label>State of origin</label>
+                                    <select name="religion" name="state" class="form-control" ng-model="patient.state" required>
+                                        <option value="-">-</option>
+                                        <option ng-repeat="state in states" ng-value="state.id">
+                                            {{state.state}}
+                                        </option>
+                                    </select>
+                                    <p ng-show="patientForm.state.$invalid && !patientForm.state.$pristine" class="help-block">Please select a state of origin.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Religion</label>
+                                    <select name="religion" class="form-control" ng-model="patient.religion">
+                                        <option value="-">-</option>
+                                        <option ng-repeat="rel in religions" ng-value="rel.id">
+                                                {{rel.religion}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Ethnic Group</label>
+                                    <select name="ethnic" class="form-control" ng-model="patient.ethnic">
+                                        <option value="-">-</option>
+                                        <option ng-repeat="ethnic in ethnics" ng-value="ethnic.id">
+                                            {{ethnic.ethnic}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <h3>Next of Kin</h3>
+                                <hr>
+                            </div>                                
+                                <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : patientForm.nokFname.$invalid && !patientForm.nokFname.$pristine }">
+                                        <label>Next of Kin Firstname</label>
+                                        <input type="text" name="nokFname" class="form-control" ng-model="patient.nokFname" required>
+                                        <p ng-show="patientForm.nokFname.$invalid && !patientForm.nokFname.$pristine" class="help-block">Your next of kin firstname is required.</p>
+                                    </div>
+                                </div>
+    
+                                <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : patientForm.nokSname.$invalid && !patientForm.nokSname.$pristine }">
+                                        <label>Next of Kin Surname</label>
+                                        <input type="text" name="nokSname" class="form-control" ng-model="patient.nokSname" required>
+                                        <p ng-show="patientForm.nokSname.$invalid && !patientForm.nokSname.$pristine" class="help-block">Your next of kin surname is required.</p>
+                                    </div>
+                                </div>
+    
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Next of Kin Othername</label>
+                                        <input type="text" name="nokOname" class="form-control" ng-model="patient.nokOname">
+                                    </div>
+                                </div>
+    
+                                <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : patientForm.nokPhone.$invalid && !patientForm.nokPhone.$pristine }">
+                                        <label>Next of Kin Phone number</label>
+                                        <input type="text" name="nokPhone" class="form-control" ng-model="patient.nokPhone" ng-minlength="11" ng-maxlength="11">
+                                        <p ng-show="userForm.nokPhone.$error.minlength" class="help-block">Phone Number is too short.</p>
+                                        <p ng-show="userForm.nokPhone.$error.maxlength" class="help-block">Phone Number is too long.</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                        <div class="form-group" ng-class="{ 'has-error' : patientForm.nokAdd.$invalid && !patientForm.nokAdd.$pristine }">
+                                            <label>Next of Kin Address</label>
+                                            <input type="text" name="nokAdd" class="form-control" ng-model="patient.nokAdd" required>
+                                            <p ng-show="patientForm.nokAdd.$invalid && !patientForm.nokAdd.$pristine" class="help-block">Your next of kin address is required.</p>
+                                        </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : patientForm.nokState.$invalid && !patientForm.nokState.$pristine }">
+                                        <label>Next of Kin State of Residence</label>
+                                        <select name="religion" name="nokState" class="form-control" ng-model="patient.nokState" required>
+                                            <option value="-">-</option>
+                                            <option ng-repeat="state in states" ng-value="state.id">
+                                                    {{state.state}}
+                                            </option>
+                                        </select>
+                                        <p ng-show="patientForm.nokState.$invalid && !patientForm.nokState.$pristine" class="help-block">Please select a state for Next of Kin.</p>
+                                    </div>
+                                </div>
+                            <div class="col-sm-12">
+                                <h3>Health</h3>
+                                <hr>
+                            </div> 
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Blood Group</label>
+                                    <select name="bloodG" class="form-control" ng-model="patient.bloodG">
+                                        <option value="-">-</option>
+                                        <option ng-repeat="bloodG in bloodGroups" ng-value="bloodG.id">
+                                            {{bloodG.bloodGroup}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Genotype</label>
+                                    <select name="geno" class="form-control" ng-model="patient.geno">
+                                        <option value="-">-</option>
+                                        <option ng-repeat="type in genotypes" ng-value="type.id">
+                                            {{type.genotype}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" ng-disabled="patientForm.$invalid">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" ng-if="addPatientErr == 1">
+                                <div class="form-group">
+                                    <span class="alert alert-danger">This patient already exists. Edit this patient's record from the patients' table.</span>
+                                </div>
+                            </div>
+                        </div>                        
+                    </form>
+                </div>
+                <!--<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>-->
+            </div>
+        
+        </div>
+    </div>
+    <!-- Modal -->
+
+    <!-- Modal -->
+    <div id="addConsultation" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-comment"></span> Consultation</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="" name="consultForm" ng-submit="submitConsultForm(consultForm.$valid, consult)" novalidate>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h3>Consultation</h3>
+                            </div>
+                            <div class="col-sm-12">
+                                <label>Notes &amp; Progress</label>
+                                <div class="form-group" ng-class="{ 'has-error' :consultForm.notes.$invalid && !consultForm.notes.$pristine }">
+                                    <textarea name="notes" class="form-control" ng-model="consult.notes" required rows="7"></textarea>
+                                    <p ng-show="consultForm.notes.$invalid && !consultForm.notes.$pristine" class="help-block">This field is required.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                    <label>Prescribe Drugs</label>
+                                    <div class="form-group" id="drugInput">
+                                        <div class="col-sm-3" ng-repeat="drug in drugs">
+                                            <input type="checkbox" name="selectedDrugs[]" value="{{drug.id}}" ng-click="toggleSelection(drug.id)">
+                                            {{drug.drugName}} 
+                                                        
+                                        </div>
+                                </div>
+                                
+                            </div>
+                            <div class="col-sm-12"><hr class="hr"></div>
+                            
+                            <div class="col-sm-12">
+                                <h3 class="makeLink" ng-click="displayAdmit()">Admit Patient?</h3>
+                            </div>                            
+                            <span ng-hide="showAdmit">
+                                <!--<div class="col-sm-12">
+                                    <h3>Admission</h3>
+                                </div>-->
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Ward</label>
+                                        <select name="ward" class="form-control" ng-model="consult.ward">
+                                            <option value="-">-</option>
+                                            <option ng-repeat="ward in wards" ng-value="ward.id">
+                                                    {{ward.ward}}
+                                            </option>
+                                        </select>
+                                        
+                                    </div>
+                                    <hr class="hr">
+                                </div>
+                            </span>
+
+                            <div class="col-sm-12">
+                                <h3 class="makeLink" ng-click="displaySurg()">Schedule Surgery?</h3>
+                            </div>                            
+                            <span ng-hide="showSurg">
+                                <!--<div class="col-sm-12">
+                                    <h3>Surgery</h3>
+                                </div>-->
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                            <label>Surgery</label>
+                                            <input type="text" name="surg" class="form-control" ng-model="consult.surg">
+                                    
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Surgery Notes &amp; Progress</label>
+                                        <textarea name="notes" class="form-control" ng-model="consult.surgNotes" rows="10"></textarea>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Surgeon</label>
+                                        <select name="surgeon" class="form-control" ng-model="consult.surgeon">
+                                            <option value="-">-</option>
+                                            <option ng-repeat="staff in staff" ng-value="staff.id">
+                                                {{staff.position}} {{staff.firstname}} {{staff.lastname}}
+                                            </option>
+                                        </select>
+                                        
+                                    </div>
+                                    <hr class="hr">
+                                </div>
+                            </span>
+
+                            <div class="col-sm-12">
+                                <h3>Fees</h3>
+                                <div class="form-group" ng-class="{ 'has-error' :consultForm.fee.$invalid && !consultForm.fee.$pristine }">
+                                    <input type="number" placeholder="Do not include price for drugs" name="fee" class="form-control" ng-model="consult.fee" required>
+                                    <p ng-show="consultForm.fee.$invalid && !consultForm.fee.$pristine" class="help-block">This field is required &amp; should be an amout in figures.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary" ng-disabled="consultForm.$invalid">Seen</button>
+                                    </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- Modal -->
+
+    <!-- Modal -->
+    <div id="deleteModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-remove"></span> Delete Patient</h4>
+                </div>
+                <div class="modal-body">
+                    <p>You are about to delete a patient (<b>{{fName}} {{lName}}</b>) from the Hospital's data bank.</p>
+                    <p>If you are sure you want to delete this patient please click on the button bellow else exit.</p>
+                    <button class="btn btn-danger" ng-click="deletePat(id)">Delete Patient</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- Modal -->
+    <!-- Modal -->
+    <div id="dispenseDrug" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Dispense Drugs</h4>
+                </div>
+                <div class="modal-body">
+                    <h4>Check the box to indicate drug issued</h4>
+                    <p ng-if="drugNum < 1" class="ash">
+                        This patient has no outstanding PAID drug to be dispensed
+                    </p>
+                    <ul ng-if="drugNum > 0">
+                        <li ng-repeat="drug in drugDispense">
+                            {{drug.drugName}} 
+                            <span class="">
+                                <span ng-if="drug.issued === 'N'">
+                                    <!--<a href="" ng-click="drugIssued(drug.id)">Issue</a>-->
+                                    <input type="checkbox" ng-click="drugIssued($event, drug.id)">
+                                </span>
+                                <span ng-if="drug.issued === 'Y'">
+                                    <span style="color: green">Issued</span>
+                                    <a href="" ng-click="revertDrugIssued(drug.id)">
+                                        <span class="glyphicon glyphicon-remove" style="color: red"></span>
+                                    </a>
+                                </span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- Modal -->
+    
+</div>

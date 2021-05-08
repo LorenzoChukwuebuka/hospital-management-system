@@ -1,0 +1,402 @@
+<div id="systMgrBody">
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#/dashboard">{{hosp}}</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#/dashboard">Registar</a></li>
+                <li class="active" ng-if="superUser === 'Y'"><a href="#/systManager">Settings</a></li>                
+                <li ng-if="superUser === 'Y'"><a href="#/systData">Data</a></li>
+                <li>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">{{name}}
+                    <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                            <li><a href="#/logout">Logout</a></li>
+                    </ul>
+                </li>
+                
+            </ul>
+        </div>
+    </nav>
+    <div class="container" id="systMgr">
+        <div class="col-sm-12">
+            <h2>System Settings</h2>
+            
+            <div class="col-sm-6" id="addPat">
+                <h3>Add Patient</h3>
+                <form class="" name="patientForm" ng-submit="submitPatientForm(patientForm.$valid, patient)" novalidate>
+                        <div class="row">
+                            <div class="col-sm-12" >
+                                <h4>Bio Data</h4>
+                                <hr>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.fName.$invalid && !patientForm.fName.$pristine }">
+                                    <label>Firstname</label>
+                                    <input type="text" name="fName" class="form-control" ng-model="patient.fName" required>
+                                    <p ng-show="patientForm.fName.$invalid && !patientForm.fName.$pristine" class="help-block">Your firstname is required.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.sName.$invalid && !patientForm.sName.$pristine }">
+                                    <label>Surname</label>
+                                    <input type="text" name="sName" class="form-control" ng-model="patient.sName" required>
+                                    <p ng-show="patientForm.sName.$invalid && !patientForm.sName.$pristine" class="help-block">Your surname is required.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Othername</label>
+                                    <input type="text" name="oName" class="form-control" ng-model="patient.oName">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.phone.$invalid && !patientForm.phone.$pristine }">
+                                    <label>Phone number</label>
+                                    <input type="text" name="phone" class="form-control" ng-model="patient.phone" ng-minlength="11" ng-maxlength="11">
+                                    <!--<p ng-show="patientForm.phone.$invalid && !patientForm.phone.$pristine" class="help-block">Your phone number is required.</p>-->
+                                    <p ng-show="patientForm.phone.$error.minlength" class="help-block">Phone number is too short.</p>
+                                    <p ng-show="patientForm.phone.$error.maxlength" class="help-block">Phone number is too long.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.dob.$invalid && !patientForm.dob.$pristine }">
+                                    <label>Date of Birth</label>
+                                    <input type="date" name="dob" class="form-control" ng-model="patient.dob" required>
+                                    <p ng-show="patientForm.dob.$invalid && !patientForm.dob.$pristine" class="help-block">Your date of birth is required.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.add.$invalid && !patientForm.add.$pristine }">
+                                    <label>Address</label>
+                                    <input type="text" name="add" class="form-control" ng-model="patient.add" required>
+                                    <p ng-show="patientForm.add.$invalid && !patientForm.add.$pristine" class="help-block">Your address is required.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.stateR.$invalid && !patientForm.stateR.$pristine }">
+                                    <label>State of Residence</label>
+                                    <select name="religion" name="stateR" class="form-control" ng-model="patient.stateR" required>
+                                        <option value="-">-</option>
+                                        <option ng-repeat="state in states" ng-value="state.id">
+                                            {{state.state}}
+                                        </option>
+                                    </select>
+                                    <p ng-show="patientForm.stateR.$invalid && !patientForm.stateR.$pristine" class="help-block">Please select a state of residence.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Occupation</label>
+                                    <input type="text" name="occupation" class="form-control" ng-model="patient.occupation">                                    
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : patientForm.state.$invalid && !patientForm.state.$pristine }">
+                                    <label>State of origin</label>
+                                    <select name="religion" name="state" class="form-control" ng-model="patient.state" required>
+                                        <option value="-">-</option>
+                                        <option ng-repeat="state in states" ng-value="state.id">
+                                            {{state.state}}
+                                        </option>
+                                    </select>
+                                    <p ng-show="patientForm.state.$invalid && !patientForm.state.$pristine" class="help-block">Please select a state of origin.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Religion</label>
+                                    <select name="religion" class="form-control" ng-model="patient.religion">
+                                        <option value="-">-</option>
+                                        <option ng-repeat="rel in religions" ng-value="rel.id">
+                                                {{rel.religion}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Ethnic Group</label>
+                                    <select name="ethnic" class="form-control" ng-model="patient.ethnic">
+                                        <option value="-">-</option>
+                                        <option ng-repeat="ethnic in ethnics" ng-value="ethnic.id">
+                                            {{ethnic.ethnic}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <h4>Next of Kin</h4>
+                                <hr>
+                            </div>                                
+                                <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : patientForm.nokFname.$invalid && !patientForm.nokFname.$pristine }">
+                                        <label>Next of Kin Firstname</label>
+                                        <input type="text" name="nokFname" class="form-control" ng-model="patient.nokFname" required>
+                                        <p ng-show="patientForm.nokFname.$invalid && !patientForm.nokFname.$pristine" class="help-block">Your next of kin firstname is required.</p>
+                                    </div>
+                                </div>
+    
+                                <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : patientForm.nokSname.$invalid && !patientForm.nokSname.$pristine }">
+                                        <label>Next of Kin Surname</label>
+                                        <input type="text" name="nokSname" class="form-control" ng-model="patient.nokSname" required>
+                                        <p ng-show="patientForm.nokSname.$invalid && !patientForm.nokSname.$pristine" class="help-block">Your next of kin surname is required.</p>
+                                    </div>
+                                </div>
+    
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Next of Kin Othername</label>
+                                        <input type="text" name="nokOname" class="form-control" ng-model="patient.nokOname">
+                                    </div>
+                                </div>
+    
+                                <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : patientForm.nokPhone.$invalid && !patientForm.nokPhone.$pristine }">
+                                        <label>Next of Kin Phone number</label>
+                                        <input type="text" name="nokPhone" class="form-control" ng-model="patient.nokPhone" ng-minlength="11" ng-maxlength="11">
+                                        <p ng-show="userForm.nokPhone.$error.minlength" class="help-block">Phone Number is too short.</p>
+                                        <p ng-show="userForm.nokPhone.$error.maxlength" class="help-block">Phone Number is too long.</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                        <div class="form-group" ng-class="{ 'has-error' : patientForm.nokAdd.$invalid && !patientForm.nokAdd.$pristine }">
+                                            <label>Next of Kin Address</label>
+                                            <input type="text" name="nokAdd" class="form-control" ng-model="patient.nokAdd" required>
+                                            <p ng-show="patientForm.nokAdd.$invalid && !patientForm.nokAdd.$pristine" class="help-block">Your next of kin address is required.</p>
+                                        </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : patientForm.nokState.$invalid && !patientForm.nokState.$pristine }">
+                                        <label>Next of Kin State of Residence</label>
+                                        <select name="religion" name="nokState" class="form-control" ng-model="patient.nokState" required>
+                                            <option value="-">-</option>
+                                            <option ng-repeat="state in states" ng-value="state.id">
+                                                    {{state.state}}
+                                            </option>
+                                        </select>
+                                        <p ng-show="patientForm.nokState.$invalid && !patientForm.nokState.$pristine" class="help-block">Please select a state for Next of Kin.</p>
+                                    </div>
+                                </div>
+                            <div class="col-sm-12">
+                                <h4>Health</h4>
+                                <hr>
+                            </div> 
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Blood Group</label>
+                                    <select name="bloodG" class="form-control" ng-model="patient.bloodG">
+                                        <option value="-">-</option>
+                                        <option ng-repeat="bloodG in bloodGroups" ng-value="bloodG.id">
+                                            {{bloodG.bloodGroup}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Genotype</label>
+                                    <select name="geno" class="form-control" ng-model="patient.geno">
+                                        <option value="-">-</option>
+                                        <option ng-repeat="type in genotypes" ng-value="type.id">
+                                            {{type.genotype}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" ng-disabled="patientForm.$invalid">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" ng-if="addPatientErr == 1">
+                                <div class="form-group">
+                                    <span class="alert alert-danger">This patient already exists. Edit this patient's record from the patients' table.</span>
+                                </div>
+                            </div>
+                        </div>                        
+                    </form>
+            </div>
+            <div class="col-sm-6">
+                <div class="col-sm-12">
+                    <h3>Add Staff <small>(Dr., Nurse, Pharm., Lab Attendant)</small></h3>
+                    <form class="" name="staffForm" ng-submit="submitStaffForm(staffForm.$valid, staff)" novalidate>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : staffForm.position.$invalid && !staffForm.position.$pristine }">
+                                    <label>Staff Role</label>
+                                    <select name="position" class="form-control" ng-model="staff.position" required>
+                                        <option value="-">-</option>
+                                        <option ng-repeat="pos in staffPos" ng-value="pos.id">
+                                            {{pos.position}}
+                                        </option>-->
+                                    </select>
+                                    <p ng-show="staffForm.position.$invalid && !staffForm.position.$pristine" class="help-block">Please select staff role.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : staffForm.sFName.$invalid && !staffForm.sFName.$pristine }">
+                                        <label>Staff Firstname</label>
+                                        <input type="text" name="sFName" class="form-control" ng-model="staff.sFName" required>
+                                        <p ng-show="staffForm.sFName.$invalid && !staffForm.sFName.$pristine" class="help-block">Staff firstname is required.</p>
+                                    </div>
+                            </div>
+    
+                            <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : staffForm.sSName.$invalid && !staffForm.sSName.$pristine }">
+                                        <label>Staff Surname</label>
+                                        <input type="text" name="sSName" class="form-control" ng-model="staff.sSName" required>
+                                        <p ng-show="staffForm.sSName.$invalid && !staffForm.sSName.$pristine" class="help-block">Staff surname is required.</p>
+                                    </div>
+                            </div>
+    
+                            <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Staff Othername</label>
+                                        <input type="text" name="sOName" class="form-control" ng-model="staff.sOName">
+                                    </div>
+                            </div>
+    
+                            <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : staffForm.sPhone.$invalid && !staffForm.sPhone.$pristine }">
+                                        <label>Staff Phone number</label>
+                                        <input type="text" name="sPhone" class="form-control" ng-model="staff.sPhone" ng-minlength="11" ng-maxlength="11">
+                                        <p ng-show="staffForm.sPhone.$error.minlength" class="help-block">Phone number is too short.</p>
+                                        <p ng-show="staffForm.sPhone.$error.maxlength" class="help-block">Phone number is too long.</p>
+                                    </div>
+                            </div>
+    
+                            <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : staffForm.sdob.$invalid && !staffForm.sdob.$pristine }">
+                                        <label>Staff Date of Birth</label>
+                                        <input type="date" name="sdob" class="form-control" ng-model="staff.sdob" required>
+                                        <p ng-show="staffForm.sdob.$invalid && !staffForm.sdob.$pristine" class="help-block">Staff date of birth is required.</p>
+                                    </div>
+                            </div>
+    
+                            <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : staffForm.sAdd.$invalid && !staffForm.sAdd.$pristine }">
+                                        <label>Staff Address</label>
+                                        <input type="text" name="sAdd" class="form-control" ng-model="staff.sAdd" required>
+                                        <p ng-show="staffForm.sAdd.$invalid && !staffForm.sAdd.$pristine" class="help-block">Staff address is required.</p>
+                                    </div>
+                            </div>
+                            <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : staffForm.sStateR.$invalid && !staffForm.sStateR.$pristine }">
+                                        <label>State of Residence</label>
+                                        <select name="sStateR" class="form-control" ng-model="staff.sStateR" required>
+                                            <option value="-">-</option>
+                                            <option ng-repeat="state in states" ng-value="state.id">
+                                                {{state.state}}
+                                            </option>
+                                        </select>
+                                        <p ng-show="staffForm.sStateR.$invalid && !staffForm.sStateR.$pristine" class="help-block">Please select staff state of residence.</p>
+                                    </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" ng-disabled="staffForm.$invalid">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" ng-if="addStaffErr == 1">
+                                <div class="form-group">
+                                    <span class="alert alert-danger">This staff already exists. Edit this staff's record from the staff table.</span>
+                                </div>
+                            </div>
+                            </div>                        
+                        </form>
+                </div>
+                <div class="col-sm-12">
+                    <h3>Add Drugs</h3> 
+                    <form class="" name="drugForm" ng-submit="submitDrugForm(drugForm.$valid, drug)" novalidate>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                            <div class="form-group" ng-class="{ 'has-error' : drugForm.fName.$invalid && !drugForm.fName.$pristine }">
+                                                <label>Drug Name</label>
+                                                <input type="text" name="drugName" class="form-control" ng-model="drug.drugName" required>
+                                                <p ng-show="drugForm.drugName.$invalid && !drugForm.drugName.$pristine" class="help-block">Drug name is required.</p>
+                                            </div>
+                                </div>
+                                <div class="col-sm-12">
+                                        <div class="form-group" ng-class="{ 'has-error' : drugForm.amt.$invalid && !drugForm.amt.$pristine }">
+                                            <label>Drug Price</label>
+                                            <input type="text" name="amt" class="form-control" ng-model="drug.amt" required>
+                                            <p ng-show="drugForm.amt.$invalid && !drugForm.amt.$pristine" class="help-block">Drug Price is required.</p>
+                                        </div>
+                                </div>
+        
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary" ng-disabled="drugForm.$invalid">Submit</button>
+                                    </div>
+                                </div>
+                                
+                                </div>                        
+                            </form>   
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="addStaff" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+    
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title"><span class="glyphicon flyphicon-plus"></span> Add Staff</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Successfully Added Staff</h4>
+                The staff with the names <b>{{staffFname}}</b> has been added to our staff. <br>
+                His/Her passcode is <b>{{code}}</b>. Please ensure he/she copies it out.
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="addDrug" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon flyphicon-plus"></span> Add Drug</h4>
+                </div>
+                <div class="modal-body">
+                    <span ng-if="addDrugErr == 1">
+                        <p>Successfully added drug</p>
+                    </span>
+                    <span ng-if="addDrugErr == 2">
+                        <p>The drug you are trying to add couldn't be added. Please try again.</p>>
+                    </span>
+                    
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        
+            </div>
+        </div>
+</div>

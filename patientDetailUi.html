@@ -1,0 +1,498 @@
+<div id="patDetBody">
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#/dashboard">{{hosp}}</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="#/dashboard">Registar</a></li>
+                <li ng-if="superUser === 'Y'"><a href="#/systManager">Settings</a></li>                
+                <li ng-if="superUser === 'Y'"><a href="#/systData">Data</a></li>
+                <li>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">{{name}}
+                    <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                            <li><a href="#/logout">Logout</a></li>
+                    </ul>
+                </li>
+                
+            </ul>
+        </div>
+    </nav>
+    <div class="container" id="patDet">
+        <section ng-if="superUser === 'Y' || whoAreYou === '4'">
+            <h3>Schedule Appointment</h3>
+            <hr>
+                    <span ng-if="see === 1 && seeDr == 1 && seenDr == 'N'">
+                        <button class="btn btn-default">Patient has appointment with Doctor</button>
+                        <!--<p style="color: green; font-weight: bold"></p>-->
+                    </span>
+                    <span ng-if="see === 1 && seeDr == 1 && seenDr == 'Y'">
+                        <button class="btn btn-primary" disabled>Patient has seen Doctor</button>
+                        <!--<p style="color: green; font-weight: bold"></p>-->
+                    </span>
+                    <span ng-if="see !== 1 || seeDr == 0 && seenDr == 'N'">
+                        <button class="btn btn-default" ng-click="seeDoc()">See Doctor</button>
+                    </span>
+                
+                    <span ng-if="see === 1 && seePharm == 'Y' && seenPharm == 'N'">
+                        <button class="btn btn-default">Patient has appointment at the Pharmacy</button>
+                        <!--<p style="color: green; font-weight: bold"></p>-->
+                    </span>
+                    <span ng-if="see === 1 && seePharm == 'Y' && seenPharm == 'Y'">
+                        <button class="btn btn-primary" disabled>Patient has seen the Pharmacy</button>
+                        <!--<p style="color: green; font-weight: bold"></p>-->
+                    </span>
+                    <span ng-if="see !== 1 || seePharm == 'N' && seenPharm == 'N'">
+                            <button class="btn btn-default" ng-click="seePharma()">Go to Pharmacy</button>
+                    </span>
+                
+                    <span ng-if="see === 1 && seeLab == 'Y' && seenLab == 'N'">
+                        <button class="btn btn-default">Patient has appointment at the Lab</button>
+                        <!--<p style="color: green; font-weight: bold"></p>-->
+                    </span>
+                    <span ng-if="see === 1 && seeLab == 'Y' && seenLab == 'Y'">
+                        <button class="btn btn-primary" disabled>Patient has been to the Lab</button>
+                        <!--<p style="color: green; font-weight: bold"></p>-->
+                    </span>
+                    <span ng-if="see !== 1 || seeLab == 'N' && seenLab == 'N'">
+                            <button class="btn btn-default" ng-click="seeLabo()">Go to Lab</button>
+                    </span>
+        </section>
+        <section>
+            <h3>
+                Basic Infromation 
+                
+            </h3>
+            <hr>
+            <div class="col-sm-12">
+                <h4 class="sect"><u>Bio</u></h4>
+                <div class="col-sm-3">
+                    <b>Firstname: </b> <span ng-if="superUser === 'Y' || whoAreYou === '4' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="edit('patient', 'firstname', id)"></span><br>
+                    {{fName}}
+                </div>
+                <div class="col-sm-3">
+                    <b>Surname: </b> <span ng-if="superUser === 'Y' || whoAreYou === '4' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="edit('patient', 'surname', id)"></span><br>
+                    {{sName}}
+                </div>
+                <div class="col-sm-3">
+                    <b>Othername: </b> <span ng-if="superUser === 'Y' || whoAreYou === '4' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="edit('patient', 'othername', id)"></span><br>
+                    {{oName}}
+                </div>
+                <div class="col-sm-3">
+                    <b>Phone: </b> <span ng-if="superUser === 'Y' || whoAreYou === '4' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="edit('patient', 'phone', id)"></span><br>
+                    {{phone}}
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <b>Address: </b> <span ng-if="superUser === 'Y' || whoAreYou === '4' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="edit('address', 'address', id)"></span><br>
+                    {{add}}, {{state}}
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <h4 class="sect"><u>Next of Kin</u></h4>
+                <div class="col-sm-3">
+                    <b>Next of Kin Firstname: </b> <span ng-if="superUser === 'Y' || whoAreYou === '4' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="edit('nok', 'nokFirst', id)"></span><br>
+                    {{nokFname}}
+                </div>
+                <div class="col-sm-3">
+                    <b>Next of Kin Surname: </b> <span ng-if="superUser === 'Y' || whoAreYou === '4' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="edit('nok', 'nokSur', id)"></span><br>
+                    {{nokSname}}
+                </div>
+                <div class="col-sm-3">
+                    <b>Next of Kin Address: </b> <span ng-if="superUser === 'Y' || whoAreYou === '4' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="edit('nok', 'nokAdd', id)"></span><br>
+                    {{nokAdd}}, {{nokState}}
+                </div>
+                <div class="col-sm-3">
+                    <b>Next of Kin Phone: </b> <span ng-if="superUser === 'Y' || whoAreYou === '4' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="edit('nok', 'nokPhone', id)"></span><br>
+                    {{nokPhone}}      
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <h4 class="sect"><u>Health</u></h4>
+                <div class="col-sm-3">
+                    <b>Blood Group: </b> <span ng-if="superUser === 'Y' || whoAreYou === '4' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="edit('patient', 'bloodG', id)"></span><br>
+                    {{blood}}
+                </div>
+                <div class="col-sm-3">
+                    <b>Genotype: </b> <span ng-if="superUser === 'Y' || whoAreYou === '4' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="edit('patient', 'geno', id)"></span><br>
+                    {{geno}}
+                </div>
+                <div class="col-sm-3">
+                    <b>Allergies:</b> <span ng-if="superUser === 'Y' || whoAreYou === '4' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="edit('allergy', 'allergy', id)"></span>
+                    <ul>
+                        <li ng-repeat="allergy in allergies">
+                            {{allergy.allergy}} <span ng-if="superUser === 'Y' || whoAreYou === '4' || whoAreYou === '1'" class="glyphicon glyphicon-remove red" ng-click="deleteAllergy(allergy.id)"></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-3">
+                    
+                </div>
+            </div>
+        </section>
+        <section>
+            <h3>Patient Consultation History</h3>
+            <hr>
+            <span ng-if="visitNum < 1">
+                    <span class="ash">
+                            <i>This is a new patient. Patient records will display after patient has use any of the hospital services. </i>
+                        </span>
+            </span>
+            <span ng-if="visitNum > 0">
+                <div class="col-sm-12" ng-repeat="visit in visited">
+                    <h4 class="h4"><span class="glyphicon glyphicon-menu-right"></span> {{visit.visit.dateVisited | date}}</h4>
+                    <div class="col-sm-4">
+                        <h5><b>NOTES &amp; PROGRESS</b> </h5>
+                        <p>
+                            {{visit.visit.diagnosis}}
+                        </p>
+                        
+                    </div>
+                    <div class="col-sm-3">
+                        <h5><b>DRUGS ISSUED</b></h5>
+                        <ul>
+                            <li ng-repeat="drug in visit.drug">
+                                {{drug.drugName}} 
+                                <span ng-if="superUser === 'Y' || whoAreYou === '4'">
+                                    <span ng-if="drug.paid === 'N'" class="pull-right">
+                                        N{{drug.price | number}} 
+                                        <a href="" ng-click="payForDrug(drug.id, drug.price)">Pay</a>
+                                    </span>
+                                    
+                                    <span ng-if="drug.paid === 'Y' && drug.issued === 'N'" class="pull-right">
+                                        N{{drug.price | number}} 
+                                        <span style="color: green">Paid</span> 
+                                        <a  href="" style="color: red" ng-click="delPayForDrug(drug.id, drug.price)"><span class="glyphicon glyphicon-remove"></span></a>
+                                    </span>
+                                    <span ng-if="drug.paid === 'Y' && drug.issued === 'Y'" class="pull-right">
+                                        N{{drug.price | number}} 
+                                        <span style="color: green">Paid</span>  
+                                        <span style="color: green"><span class="glyphicon glyphicon-ok"></span></span> 
+                                    </span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-2">
+                        <h5><b>SEEN BY</b></h5>
+                        <p>
+                            Dr. {{visit.visit.staffName}}
+                        </p>                    
+                    </div>
+                    <div class="col-sm-3">
+                        <h5><b>FEES</b></h5>
+                        Consultancy Fee: <s>N</s>{{visit.visit.consultancyFee | number}}
+                        <span ng-if="superUser === 'Y' || whoAreYou === '4'">
+                            <span ng-if="visit.visit.consultancyFeePaid === 'N'" class="pull-right">
+                                <a href="" ng-click="payForConsult(visit.visit.pvId, visit.visit.consultancyFee)">Pay</a>
+                            </span>
+                            <span ng-if="visit.visit.consultancyFeePaid === 'Y'" class="pull-right">
+                                <span style="color: green">Paid</span> 
+                                <a  href="" style="color: red" ng-click="delPayForConsult(visit.visit.pvId, visit.visit.consultancyFee)"><span class="glyphicon glyphicon-remove"></span></a>
+                            </span>
+                            
+                        </span>
+                        <br>
+                        Total: <b><s>N</s>{{visit.visit.fee | number}}</b><br>
+                        Paid: <b><s>N</s>{{visit.visit.paid | number}}</b><br>
+                        Outstanding: <b><s>N</s>{{visit.visit.fee - visit.visit.paid  | number}}</b>
+                    </div>
+                    <hr>
+                    <div class="col-sm-12">
+                            <div class="col-sm-6">
+                                <h4><b><u>SURGERY</u></b></h4>
+                                <div>
+                                    <span ng-if="visit.surgNum < 1">
+                                        <span class="ash">
+                                            <i>No surgical history on this visit. </i>
+                                            <b>Add a surgical history
+                                                <span ng-if="superUser === 'Y' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="addSurg(visit.visit.pvId)"></span>
+                                            </b>
+                                        </span>
+                                    </span>
+                                    <span ng-if="visit.surgNum > 0">
+                                        <div class="col-sm-6">
+                                            <h5><b>Operation</b></h5>
+                                            {{visit.surgery.surgery}}
+                                            <h5><b>Surgeon</b></h5>
+                                            {{visit.surgery.surgeon}}
+                                            <h5><b>Surgery Date</b></h5>
+                                            {{visit.surgery.surgDate}}
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h5><b>Notes &amp; Progress</b></h5>
+                                            {{visit.surgery.notesProg}}
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <h4><b><u>ADMITTED</u></b></h4>
+                                <div>
+                                    <span ng-if="visit.admitNum < 1">
+                                        <span class="ash">
+                                            <i>Patient wasn't admitted on this visit. </i>
+                                            <b>Admit patient
+                                            <span ng-if="superUser === 'Y' || whoAreYou === '1'" class="glyphicon glyphicon-pencil green" ng-click="addAdmission(visit.visit.pvId)"></span> 
+                                            </b>
+                                        </span>
+                                    </span>
+                                    <span ng-if="visit.admitNum > 0">
+                                        <div class="col-sm-6">
+                                            <h5><b>Date Admitted</b></h5>
+                                            {{admitDate}}
+                                            <h5><b>Ward</b></h5>
+                                            {{admitWard}}
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h5><b>Discharge Date</b></h5>
+                                            {{dischargeDate}}
+                                            <h5><b>Condition at Discharge</b></h5>
+                                            {{dischargeStatus}}
+                                        </div>                                  
+                                        
+                                    </span>
+                                </div>
+                            </div> 
+                        <hr>                       
+                    </div>
+                    <div class="col-sm-12">
+                        <h4><b><u>LABORATORY</u></b></h4>
+                        
+                    </div>
+                </div>
+            </span>
+        </section>
+        
+    </div>
+    <!-- Modal -->
+    <div id="edit" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+    
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title"><span class="glyphicon flyphicon-pencil"></span> Edit Patient: {{fName}} {{sName}}</h4>
+            </div>
+            <div class="modal-body">
+                
+                    <div class="row">
+                            <span ng-if="targ === 'Allergy'">
+                                    <form class="" name="editForm" ng-submit="addAllergy(editForm.$valid, pat)" novalidate>
+                                        <div class="col-sm-12">
+                                            <div class="form-group" ng-class="{ 'has-error' : patientForm.data.$invalid && !patientForm.data.$pristine }">
+                                                <label>Add Allergies</label>
+                                                <input type="text" name="data" class="form-control" ng-model="pat.data" required>
+                                                <p ng-show="editForm.data.$invalid && !editForm.data.$pristine" class="help-block">This field is required.</p>                                                    
+                                            </div>
+                                            <p ng-show="patientForm.data.$invalid && !patientForm.data.$pristine" class="help-block">This field is required.</p>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary" ng-disabled="editForm.$invalid">Add</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </span>
+                        <span ng-if="targ === 'Blood Group'">
+                            <form class="" name="editForm" ng-submit="editPatient(editForm.$valid, pat, table, col)" novalidate>
+                                <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : patientForm.data.$invalid && !patientForm.data.$pristine }">
+                                            <label>Blood Group</label>
+                                            <select name="data" class="form-control" ng-model="pat.data">
+                                                <option value="-">-</option>
+                                                <option ng-repeat="bloodG in bloodGroups" ng-value="bloodG.id">
+                                                    {{bloodG.bloodGroup}}
+                                                </option>
+                                            </select>
+                                    </div>
+                                    <p ng-show="patientForm.data.$invalid && !patientForm.data.$pristine" class="help-block">This field is required.</p>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary" ng-disabled="editForm.$invalid">Edit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </span>
+                        <span ng-if="targ === 'Genotype'">
+                                <form class="" name="editForm" ng-submit="editPatient(editForm.$valid, pat, table, col)" novalidate>
+                                    <div class="col-sm-12">
+                                        <div class="form-group" ng-class="{ 'has-error' : patientForm.data.$invalid && !patientForm.data.$pristine }">
+                                                <label>Genotype</label>
+                                                <select name="data" class="form-control" ng-model="pat.data">
+                                                    <option value="-">-</option>
+                                                    <option ng-repeat="type in genotypes" ng-value="type.id">
+                                                            {{type.genotype}}
+                                                        </option>
+                                                </select>
+                                        </div>
+                                        <p ng-show="patientForm.data.$invalid && !patientForm.data.$pristine" class="help-block">This field is required.</p>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary" ng-disabled="editForm.$invalid">Edit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </span>
+                        <span ng-if="targ === 'address' || targ === 'Next of Kin Address'">
+                            <form class="" name="editForm" ng-submit="editPatient(editForm.$valid, pat, table, col)" novalidate>
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : editForm.data.$invalid && !editForm.data.$pristine }">
+                                    <label>{{targ}}</label>
+                                    <input type="text" name="data" class="form-control" ng-model="pat.data" required>
+                                    <p ng-show="editForm.data.$invalid && !editForm.data.$pristine" class="help-block">This field is required.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : patientForm.data1.$invalid && !patientForm.data1.$pristine }">
+                                        <label>State of Residence</label>
+                                        <select name="data1" class="form-control" ng-model="pat.data1" required>
+                                            <option value="-">-</option>
+                                            <option ng-repeat="state in states" ng-value="state.id">
+                                                {{state.state}}
+                                            </option>
+                                        </select>
+                                        <p ng-show="patientForm.data1.$invalid && !patientForm.data1.$pristine" class="help-block">This field is required.</p>
+                                    </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" ng-disabled="editForm.$invalid">Edit</button>
+                                </div>
+                            </div>
+                            </form>
+                        </span>
+
+                        <span ng-if="targ !== 'address' && targ !== 'Next of Kin Address' && targ !== 'Blood Group' && targ !== 'Genotype' && targ !== 'Allergy'">
+                            <form class="" name="editForm" ng-submit="editPatient(editForm.$valid, pat, table, col)" novalidate>
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : editForm.data.$invalid && !editForm.data.$pristine }">
+                                    <label>{{targ}}</label>
+                                    <input type="text" name="data" class="form-control" ng-model="pat.data" required>
+                                    <p ng-show="editForm.data.$invalid && !editForm.data.$pristine" class="help-block">This field is required.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" ng-disabled="editForm.$invalid">Edit</button>
+                                </div>
+                            </div>
+                            </form>
+                        </span>                        
+                    </div>
+                
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="surgModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title"><span class="glyphicon glyphicon-plus"></span> Add Surgery History</h4>
+            </div>
+            <div class="modal-body">
+                <form class="" name="surgForm" ng-submit="submitSurgForm(surgForm.$valid, surg, visitId)" novalidate>
+                    <div class="row">
+                        <div>
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' :surgForm.surg.$invalid && !surgForm.surg.$pristine }">
+                                        <label>Surgery</label>
+                                        <input type="text" name="surg" class="form-control" ng-model="surg.surg" required>
+                                        <p ng-show="surgForm.surg.$invalid && !surgForm.surg.$pristine" class="help-block">This field is required.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' :surgForm.notes.$invalid && !surgForm.notes.$pristine }">
+                                    <label>Notes &amp; Progress</label>
+                                    <textarea name="notes" class="form-control" ng-model="surg.notes" required rows="10"></textarea>
+                                    <p ng-show="surgForm.notes.$invalid && !surgForm.notes.$pristine" class="help-block">This field is required.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : surgForm.surgeon.$invalid && !surgForm.surgeon.$pristine }">
+                                    <label>Surgeon</label>
+                                    <select name="surgeon" class="form-control" ng-model="surg.surgeon" required>
+                                        <option value="-">-</option>
+                                        <option ng-repeat="staff in staff" ng-value="staff.id">
+                                            {{staff.position}} {{staff.firstname}} {{staff.lastname}}
+                                        </option>
+                                    </select>
+                                    <p ng-show="patientForm.data1.$invalid && !patientForm.data1.$pristine" class="help-block">This field is required.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                        <button type="submit" class="btn btn-primary" ng-disabled="surgForm.$invalid">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+      
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="admitModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Admit Patient</h4>
+            </div>
+            <div class="modal-body">
+                <form class="" name="admitForm" ng-submit="submitAdmitForm(surgForm.$valid, admit, visitId)" novalidate>
+                    <div class="row">
+                        <div>
+                            
+                            <div class="col-sm-12">
+                                <div class="form-group" ng-class="{ 'has-error' : admitForm.ward.$invalid && !admitForm.ward.$pristine }">
+                                    <label>Ward</label>
+                                    <select name="ward" class="form-control" ng-model="admit.ward" required>
+                                        <option value="-">-</option>
+                                        <option ng-repeat="ward in wards" ng-value="ward.id">
+                                            {{ward.ward}}
+                                        </option>
+                                    </select>
+                                    <p ng-show="admitForm.ward.$invalid && !admitForm.ward.$pristine" class="help-block">This field is required.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                        <button type="submit" class="btn btn-primary" ng-disabled="admitForm.$invalid">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+      
+        </div>
+    </div>
+</div>

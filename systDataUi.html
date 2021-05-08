@@ -1,0 +1,83 @@
+<div id="systDataBody">
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#/dashboard">{{hosp}}</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#/dashboard">Registar</a></li>
+                <li ng-if="superUser === 'Y'"><a href="#/systManager">Settings</a></li>                
+                <li class="active" ng-if="superUser === 'Y'"><a href="#/systData">Data</a></li>
+                <li>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">{{name}}
+                    <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                            <li><a href="#/logout">Logout</a></li>
+                    </ul>
+                </li>
+                
+            </ul>
+        </div>
+    </nav>
+        <div class="container-fluid" id="systData">
+            <div class="col-sm-12">
+                <h2>System Data</h2>
+                <div class="col-sm-8" id="seeStaff">
+                    <h3>Staff</h3>
+                    <table class="table table-stripped">
+                        <tr>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Othername</th>
+                            <th>Phone</th>
+                            <th>Position</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                        <tr ng-if="staffLen < 1">
+                            <td colspan="7" class="centre">
+                                <span class="ash"> There are no staff in the databse. Please add staff</span>
+                            </td>
+                        </tr>      
+                        <tr ng-if="staffLen >= 1" ng-repeat="staff in staff">
+                            <td>{{ staff.firstname }}</td>
+                            <td>{{ staff.lastname }}</td>
+                            <td>{{ staff.othername }}</td>
+                            <td>{{ staff.phone }}</td>
+                            <td>{{ staff.position }}</td>
+                            
+                            <td>
+                                    <a href="">
+                                        <span class="glyphicon glyphicon-pencil green"></span>
+                                    </a>
+                            </td>
+                            <td>
+                                    <a href="">
+                                        <span class="glyphicon glyphicon-remove red"></span>
+                                    </a>
+                            </td>
+        
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-4" style="margin-top: 10px">
+                        <h3>Drugs</h3>
+                        <table class="table table-stripped">
+                            <tr>
+                                <th>DrugName</th>
+                                <th>Price</th>
+                            </tr>
+                            <tr ng-if="drugLen < 1">
+                                <td colspan="7" class="centre">
+                                    <span class="ash"> There are no drugin the databse. Please add drugs</span>
+                                </td>
+                            </tr>      
+                            <tr ng-if="drugLen >= 1" ng-repeat="drug in drugs"> 
+                                <td>{{drug.drugName}}</td>
+                                <td><s>N</s>{{drug.price | number}}</td>
+                            </tr>                            
+                        </table>
+                </div>
+            </div>
+        </div>
+</div>

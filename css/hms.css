@@ -1,0 +1,240 @@
+@font-face {
+    font-family: myFont;
+    src: url(../fonts/raleway/Raleway-Regular.ttf);
+}
+@font-face {
+    font-family: myHeadingFont;
+    src: url(../fonts/raleway/Raleway-SemiBold.ttf);
+}
+
+body, html, #container {
+    height: 100%;
+}
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: myFont;
+}
+.centre {
+    text-align: center;
+}
+.ash {
+    color: #B69F9F;
+}
+.red {
+    color: red;
+}
+.green {
+    color: green;
+}
+.hr {
+    border-color: #5C4040;
+}
+.makeLink {
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+}
+.search {
+    margin-bottom: 10px;
+}
+/**home**/
+#homeUiBgrd {
+    background-image: url(../img/background.jpg);
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-size: 15px;
+}
+
+#homeLogin {
+    position: relative;
+    height: 100%;
+    left: 60%;
+    width: 40%;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+}
+
+#welcome {
+    text-align: center;
+    position: relative;
+    top: 10%;
+}
+
+#welcome h1 {
+    margin-bottom: 0px;
+    color: rgb(238, 16, 83);
+    font-family: myHeadingFont;
+}
+#welcome h2 {
+    margin-top: 4px;
+    font-size: 18px;
+}
+
+#login {
+    position: relative;
+    top: 70px;
+}
+
+#login h2 {
+    color: rgb(238, 16, 83);
+    font-family: myHeadingFont;
+}
+/**home**/
+
+/**dash**/
+#dashBody, #patDetBody, #systMgrBody, #systDataBody {
+    background-image: url(../img/dashBgrd.jpg);
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    background-attachment: fixed;
+    background-repeat: repeat-y;
+}
+.container.dash, .container#patDet, .container#systMgr, .container-fluid#systData, .container#editData {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    box-shadow: 1px 2px 5px #888888;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+.container-fluid#dashHeader, .container-fluid#patDetHeader {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.navbar {
+    border-radius: 0px;
+}
+.navbar-inverse {
+    background-color: rgb(238, 16, 83);
+    border-color: rgb(238, 16, 83);
+}
+.navbar-inverse .navbar-brand {
+    color: #FFF;
+}
+.navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-nav > li > a:hover {
+    color: #D1C5C5;
+}
+.navbar-inverse .navbar-nav > li > a {
+    color: #FFF;
+}
+#dashHeader h1, #patDetHeader h1 {
+    font-family: myHeadingFont;
+    background-color: rgb(238, 16, 83);
+    color: #fff;
+    text-align: center;
+    width: 100%;
+    margin: 0px;
+    padding: 10px;
+}
+#dashHeader h2, #patDetHeader h2 {    
+    color: rgb(238, 16, 83);
+    text-align: center;
+    width: 100%;
+    margin: 0px;
+    border-bottom: 2px solid rgb(238, 16, 83);
+    padding: 2.5px;
+}
+#dashHeader, #patDetHeader {
+    margin-bottom: 20px;
+}
+
+.dash .col-sm-12, #patDet .col-sm-12 {
+    margin-bottom: 10px;
+}
+
+.dash h2 {
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+th {
+    color: rgb(238, 16, 83);
+}
+.modal-header {
+    background-color: rgb(238, 16, 83);
+    color: #fff;
+}
+#dashBody table tr td, #dashBody table tr th {
+    text-align: center;
+}
+/**dash**/
+
+/**Patient Detail**/
+#patDet h3 {
+    color: rgb(238, 16, 83);
+    margin-bottom: 0px;
+}
+#patDet hr {
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+#patDet section {
+    margin-bottom: 30px;
+}
+#patDet .h4 {
+    background-color: #E5E7E9;
+    color: black;
+    padding: 10px;
+    margin: 0px;
+    cursor: pointer;
+}
+.sect {
+    margin-left: 15px;
+}
+#patDet .col-sm-12 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+#patDet ul {
+    margin-left: 0px;
+}
+/**Patient Detail**/
+/**systMgr**/
+#systMgr h2 {
+    color: rgb(238, 16, 83);
+    /**text-align: center;**/
+    margin: 0px;
+    border-bottom: 2px solid rgb(238, 16, 83);
+    padding: 3.5px;
+}
+
+#systMgr h3 {
+    color: rgb(238, 16, 83);
+    /**text-align: center;**/
+    margin-top: 20px;
+    padding: 2.5px;
+}
+#systMgr h4 {
+    margin-bottom: 0px;
+    font-weight: bold;
+}
+#systMgr label {
+    color: #999;
+}
+#systMgr hr {
+    margin-top: 0px;
+}
+
+#systMgr #addPat, #seeStaff {
+    border-right: thin solid #eee;
+    margin-top: 10px;
+}
+#systMgr #addPat h3 {
+    margin-top: 5px;
+}
+/**systMgr**/
+
+/**systData**/
+#systData h2 {
+    color: rgb(238, 16, 83);
+    /**text-align: center;**/
+    margin: 0px;
+    border-bottom: 2px solid rgb(238, 16, 83);
+    padding: 3.5px;
+}
+/**systData**/
